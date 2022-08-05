@@ -1,0 +1,3 @@
+#FnF3 button/volumeup VOLUP 00000080 00000000 K
+event=button/volumeup
+action=/etc/acpi/actions/FnF3-volumeup.sh

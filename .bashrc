@@ -10,13 +10,20 @@ if [[ $- != *i* ]] ; then
 fi
 
 
-# Free from here
+# -personal config-
 
 # Doom emacs to path
-export PATH="$HOME/.emacs.d/bin:$PATH"
+# export PATH="$HOME/.emacs.d/bin:$PATH"
 
 # Custom prompt
 export PS1="\[\e[31m\][\[\e[m\]\[\e[34m\]\u\[\e[m\]\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]\[\e[36m\] \W\[\e[m\]\[\e[31m\]]\[\e[m\] $ "
 
 # alias for emacsclient while daemon ist running
-alias emacs="emacsclient -c -a 'emacs'"
+# alias emacs="emacsclient -c -a 'emacs'"
+
+# clipmenu env
+export CM_SELECTIONS="clipboard"
+export CM_DEBUG=0
+export CM_OUTPUT_CLIP=1
+export CM_MAX_CLIPS=15
+export CM_IGNORE_WINDOW="KeePassXC"

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+doas emaint --auto sync
+
+doas emerge -q --ask --update --deep --newuse @world
+
+doas emerge -q --ask --depclean

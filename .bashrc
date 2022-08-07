@@ -1,5 +1,5 @@
 #  Owner = MRH
-#  bashrc from 08th August 2022 00:37
+#  bashrc from 08th August 2022 0:40
 
 # Test for an interactive shell.  There is no need to set anything
 # past this point for scp and rcp, and it's important to refrain from
@@ -14,6 +14,11 @@ fi
 
 # Doom emacs to path
 # export PATH="$HOME/.emacs.d/bin:$PATH"
+
+# vi mode
+set -o vi
+export EDITOR='vi'
+export VISUAL='vi'
 
 # Custom prompt
 export PS1="\[\e[31m\][\[\e[m\]\[\e[34m\]\u\[\e[m\]\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]\[\e[36m\] \W\[\e[m\]\[\e[31m\]]\[\e[m\] $ "

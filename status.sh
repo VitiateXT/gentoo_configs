@@ -11,5 +11,5 @@ while true; do
 	timest=$(date '+%H:%M')
 	kernelst=$(uname -r)
 	xsetroot -name " ^c#c678dd^  $batteryst% ^c#bbc2cf^|^c#51afef^  $audiost ^c#bbc2cf^|^c#98be65^  $kernelst ^c#bbc2cf^|^c#ecbe7b^  $datest ^c#bbc2cf^|^c#ff6c6b^  $timest "
-	sleep 3s
+	sleep 1s
 done

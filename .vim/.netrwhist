@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/moritz/.backups/doom-emacs-conf'
+let g:netrw_dirhist_3='/etc/portage/package.accept_keywords'
+let g:netrw_dirhist_2='/etc/portage/package.license'
+let g:netrw_dirhist_1='/home/moritz/.pipewire-startup'

@@ -3,13 +3,16 @@
 #!/bin/sh
 
 # xhost (maybe remove later)
-xhost +local: 
+xhost +local: &
 
 #unmute speaker
-amixer set Master unmute
+amixer set Master unmute &
 
 # emacs daemon
-/usr/bin/emacs --daemon
+# /usr/bin/emacs --daemon
+
+#clipmenu
+clipmenud &
 
 # statusbar
 source ~/.scripts/status.sh

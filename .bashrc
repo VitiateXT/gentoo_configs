@@ -1,5 +1,5 @@
 #  Owner = MRH
-#  bashrc from 19th May 2022 2:45
+#  bashrc from 08th August 2022 00:37
 
 # Test for an interactive shell.  There is no need to set anything
 # past this point for scp and rcp, and it's important to refrain from

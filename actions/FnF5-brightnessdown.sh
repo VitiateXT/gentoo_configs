@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DecVal=20
+DecVal=5
 
 MinVal=0
 

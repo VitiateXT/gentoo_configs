@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IncVal=20
+IncVal=5
 
 read -r MaxVal < "sys/class/backlight/amdgpu_bl0/max_brightness"
 

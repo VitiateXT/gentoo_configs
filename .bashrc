@@ -30,5 +30,5 @@ export PS1="\[\e[31m\][\[\e[m\]\[\e[34m\]\u\[\e[m\]\[\e[m\]\[\e[33m\]@\[\e[m\]\[
 export CM_SELECTIONS="clipboard"
 export CM_DEBUG=0
 export CM_OUTPUT_CLIP=1
-export CM_MAX_CLIPS=15
+export CM_MAX_CLIPS=25
 export CM_IGNORE_WINDOW="KeePassXC"

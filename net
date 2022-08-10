@@ -1,0 +1,2 @@
+config_enp5s0="dhcp"
+modules_wlp3s0="wpa_supplicant"

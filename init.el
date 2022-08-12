@@ -8,7 +8,7 @@
 
 ;; package sources
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 (unless package-archive-contents
 (package-refresh-contents))
@@ -51,14 +51,14 @@
        )
 
 (nvmap :prefix "SPC"
-       "b b"   '(ibuffer :which-key "Ibuffer")
+       "b s"   '(save-buffer :which-key "save buffer")
        "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
        "b k"   '(kill-current-buffer :which-key "Kill current buffer")
        "b n"   '(next-buffer :which-key "Next buffer")
        "b p"   '(previous-buffer :which-key "Previous buffer")
        "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
        "b K"   '(kill-buffer :which-key "Kill buffer")
-       "b f"   '(dired :which-key "find file")
+       "b f"   '(find-file :which-key "find file")
        "w n"   '(evil-window-new :whick-key "open new window")
        "w c"   '(evil-window-delete :whick-key "close window")
        )
@@ -75,15 +75,18 @@
   :config
   (evil-mode 1))
 
+(use-package magit
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 ;; evil collection (should include magit atsp)
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
-  (evil-collection-init))
-(use-package evil-tutor)
+;;(use-package evil-collection
+;;  :after evil
+;;  :ensure t
+;;  :config
+;;  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+;;  (evil-collection-init))
+;;(use-package evil-tutor)
 
 ;; fonts
 (set-face-attribute 'default nil
@@ -107,17 +110,17 @@
 (column-number-mode)
 (global-display-line-numbers-mode t)
 
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
-  :init
-  (when (file-directory-p "~/code")
-    (setq projectile-project-search-path '("~/code")))
-  (setq projectile-switch-project-action #'projectile-dired))
+;;(use-package projectile
+;;  :diminish projectile-mode
+;;  :config (projectile-mode)
+;;  :custom ((projectile-completion-system 'ivy))
+;;  :init
+;;  (when (file-directory-p "~/code")
+;;    (setq projectile-project-search-path '("~/code")))
+;;  (setq projectile-switch-project-action #'projectile-dired))
 
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
+;;(use-package counsel-projectile
+;;  :config (counsel-projectile-mode))
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -149,7 +152,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(counsel-projectile projectile general use-package evil-tutor evil-collection doom-themes doom-modeline)))
+   '(magit counsel-projectile projectile general use-package evil-tutor evil-collection doom-themes doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

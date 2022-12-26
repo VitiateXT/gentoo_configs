@@ -10,6 +10,6 @@ while true; do
 	datest=$(date '+%a %d %b')
 	timest=$(date '+%H:%M')
 	kernelst=$(uname -r)
-	xsetroot -name " ^c#c678dd^  $batteryst% ^c#bbc2cf^|^c#51afef^  $audiost ^c#bbc2cf^|^c#98be65^  $kernelst ^c#bbc2cf^|^c#ecbe7b^  $datest ^c#bbc2cf^|^c#ff6c6b^  $timest "
+	xsetroot -name " ^c#5a4a78^  $batteryst% ^c#cfc9c2^|^c#0f4b6e^  $audiost ^c#cfc9c2^|^c#33635c^  $kernelst ^c#cfc9c2^|^c#8c4351^  $datest ^c#cfc9c2^|^c#8f5e15^  $timest "
 	sleep 1s
 done

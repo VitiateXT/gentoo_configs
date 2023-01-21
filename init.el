@@ -1,5 +1,5 @@
 ;; init.el Owner: MRH
-;; Date: 09.10.2022 15:47
+;; Date: 20.01.2023 9:58
 
 ;; no startup message
 (setq inhibit-startup-message t)
@@ -44,7 +44,7 @@
   :ensure t)
 (setq doom-themes-enable-bold t  
       doom-themes-enable-italic t) 
-(load-theme 'doom-peacock t)
+(load-theme 'doom-tokyo-night t)
 
 ;; modeline
 (use-package doom-modeline
@@ -71,28 +71,6 @@
 	:config
 	(evil-mode 1))
 
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (java-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
-(use-package flycheck)
-
-(use-package lsp-java :config (add-hook 'java-mode-hook 'lsp))
-
-;; optionally
-(use-package lsp-ui
-  :commands lsp-ui-mode)
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-
-;; optionally if you want to use debugger
-(use-package dap-mode :after lsp-mode)
-
 ;; general keybinds
 (use-package general
 	:config
@@ -100,20 +78,6 @@
 	(general-create-definer mrh/leader-keys
 		:keymaps '(normal insert visual emacs)
 		:prefix "SPC"))
-
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-    (treemacs-resize-icons 44))
- 
-(use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
-
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
 
 (nvmap :keymaps 'override :prefix "SPC"
   "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
@@ -127,10 +91,8 @@
   "f f"   '(find-file :which-key "find file")
   "w n"   '(evil-window-new :whick-key "open new window")
   "w c"   '(evil-window-delete :whick-key "close window")
-  "d j"   '(dap-java-debug :which-key "debug java app")
   "w r"   '(evil-window-move-far-right :which-key "move window right")
   "w s"   '(evil-window-vsplit :which-key "split window right")
-  "s d"   '(treemacs-select-directory :which-key "treemacs directory")
   )
 
 
@@ -145,17 +107,3 @@
 
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(treemacs-icons-dired flycheck lsp-java dap-java dap-mode lsp-ivy lsp-ui lsp-mode which-key use-package ivy general evil doom-themes doom-modeline all-the-icons)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

@@ -1,5 +1,5 @@
 ;; init.el Owner: MRH
-;; Date: 20.01.2023 9:58
+;; Date: 21.01.2023 15:50
 
 ;; no startup message
 (setq inhibit-startup-message t)
@@ -71,28 +71,29 @@
 	:config
 	(evil-mode 1))
 
-;; general keybinds
-(use-package general
-	:config
-	(general-evil-setup t)
-	(general-create-definer mrh/leader-keys
-		:keymaps '(normal insert visual emacs)
-		:prefix "SPC"))
+;; pdftools
+(use-package pdf-tools
+	     :ensure t)
 
-(nvmap :keymaps 'override :prefix "SPC"
-  "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
-  "b s"   '(save-buffer :which-key "save buffer")
-  "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
-  "b k"   '(kill-current-buffer :which-key "Kill current buffer")
-  "b n"   '(next-buffer :which-key "Next buffer")
-  "b p"   '(previous-buffer :which-key "Previous buffer")
-  "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
-  "b K"   '(kill-buffer :which-key "Kill buffer")
-  "f f"   '(find-file :which-key "find file")
-  "w n"   '(evil-window-new :whick-key "open new window")
-  "w c"   '(evil-window-delete :whick-key "close window")
-  "w r"   '(evil-window-move-far-right :which-key "move window right")
-  "w s"   '(evil-window-vsplit :which-key "split window right")
+;; general keybinds
+(use-package general)
+
+(general-define-key 
+  :states '(normal motions visual emacs)
+  :prefix "SPC" 
+  "h r r" '(lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"
+  "b s"   'save-buffer :which-key "save buffer"
+  "b c"   'clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window"
+  "b k"   'kill-current-buffer :which-key "Kill current buffer"
+  "b n"   'next-buffer :which-key "Next buffer"
+  "b p"   'previous-buffer :which-key "Previous buffer"
+  "b B"   'ibuffer-list-buffers :which-key "Ibuffer list buffers"
+  "b K"   'kill-buffer :which-key "Kill buffer"
+  "f f"   'find-file :which-key "find file"
+  "w n"   'evil-window-new :whick-key "open new window"
+  "w c"   'evil-window-delete :whick-key "close window"
+  "w r"   'evil-window-move-far-right :which-key "move window right"
+  "w s"   'evil-window-vsplit :which-key "split window right"
   )
 
 
@@ -105,5 +106,16 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-
-(add-hook 'emacs-startup-hook #'efs/display-startup-time)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(general evil which-key doom-modeline doom-themes all-the-icons ivy use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

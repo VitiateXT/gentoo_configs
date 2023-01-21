@@ -6,10 +6,12 @@
 xhost +local: &
 
 #unmute speaker
-amixer set Master unmute &
+amixer set Master 0 unmute &
+amixer set Speaker 0 unmute &
+amixer set Headphone 0 unmute &
 
 # emacs daemon
-# /usr/bin/emacs --daemon
+/usr/bin/emacs --daemon &
 
 #clipmenu
 clipmenud &

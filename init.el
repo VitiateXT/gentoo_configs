@@ -77,6 +77,20 @@
 	:config
 	(evil-mode 1))
 
+(add-hook 'text-mode-hook #'auto-fill-mode)
+(setq-default fill-column 80)
+(add-hook 'prog-mode-hook #'auto-fill-mode)
+(global-visual-line-mode 1)
+(show-paren-mode 1); Matches parentheses and such in every mode
+
+;;; AUCTeX
+;; Customary Customization, p. 1 and 16 in the manual, and http://www.emacswiki.org/emacs/AUCTeX#toc2
+(setq TeX-parse-self t); Enable parse on load.
+(setq TeX-auto-save t); Enable parse on save.
+(setq-default TeX-master nil)
+
+(setq TeX-PDF-mode t); PDF mode (rather than DVI-mode)
+
 (use-package org-bullets
       :ensure t
       :config
@@ -88,6 +102,28 @@
 
 (use-package slime
   :ensure t)
+
+(require 'ess)
+
+(setq org-latex-packages-alist '())
+(add-to-list 'org-latex-packages-alist '("" "color" t))
+(add-to-list 'org-latex-packages-alist '("" "physics" t))
+(add-to-list 'org-latex-packages-alist '("" "mathtools" t))
+(add-to-list 'org-latex-packages-alist '("" "xfrac" t))
+(add-to-list 'org-latex-packages-alist '("" "siunitx" t))
+(add-to-list 'org-latex-packages-alist '("" "mhchem" t))
+(add-to-list 'org-latex-packages-alist '("" "fontenc" t))
+(add-to-list 'org-latex-packages-alist '("" "multirow" t))
+(add-to-list 'org-latex-packages-alist '("" "graphicx" t))
+(add-to-list 'org-latex-packages-alist '("" "graphics" t))
+
+(require 'org-tempo)
+(setq inferior-lisp-program "sbcl") 
+(add-to-list 'org-structure-template-alist '("lp" . "src lisp"))
+(add-to-list 'org-structure-template-alist '("R" . "src R"))
+(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+(setq org-confirm-babel-evaluate nil)
 
 ;; skeleton
 (define-skeleton org-skeleton
@@ -103,39 +139,47 @@
   "#+PROPERTY: exports both"
   "#+PROPERTY: tangle yes"
   "#+STARTUP: indent \n"
+  "#+LATEX_HEADER: \usepackage{parskip}"
+  "#+LATEX_HEADER: \usepackage[german]{babel}"
+  "#+LANGUAGE: ge"
   "-------------------------------------------------------------------------------
 "
   )
 
 ;; general keybinds
-(use-package general)
 
-(general-define-key 
-  :states '(normal visual motion)
-  :prefix "SPC" 
-  "h r r" '(lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key
-  "Reload emacs config"
-  "b s"   'save-buffer :which-key "save buffer"
-  "b c"   'clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window"
-  "b k"   'kill-current-buffer :which-key "Kill current buffer"
-  "b n"   'next-buffer :which-key "Next buffer"
-  "b p"   'previous-buffer :which-key "Previous buffer"
-  "b B"   'ibuffer-list-buffers :which-key "Ibuffer list buffers"
-  "b K"   'kill-buffer :which-key "Kill buffer"
-  "f f"   'find-file :which-key "find file"
-  "w n"   'evil-window-new :whick-key "open new window"
-  "w c"   'evil-window-delete :whick-key "close window"
-  "w r"   'evil-window-move-far-right :which-key "move window right"
-  "w s"   'evil-window-vsplit :which-key "split window right"
-  "e b"   'eval-buffer :which-key "evaluate elisp buffer"
-  "l s"   'eval-last-sexp :which-key "evaluates last elisp s-expression"
-  "o s"   'shell :which-key "opens shell"
-  "o e"   'org-export-dispatch :which-key "opens org export"
-  "h h"   'org-insert-headind :which-key "org inserts headinf at same level"
-  "c b"   'org-insert-todo-heading :which-key "insert checkbox or TODO heading"
-  "t b"   'org-toggle-checkbox :which-key "toggle org checkbox"
-  "s k"   'org-skeleton :which-key "use org skeleton implementation"
-  )
+(use-package general)
+(general-evil-setup t)
+(general-create-definer mrh-def
+  :states '(normal insert emacs motion)
+  :prefix "SPC"
+  :non-normal-prefix "M-SPC"
+  :prefix-command 'mrh-prefix-command
+  :prefix-map 'mrh-prefix-map)
+
+(mrh-def "h r r" '(lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key)
+  ;;"Reload emacs config"
+  ;;"b s"   'save-buffer :which-key "save buffer"
+  ;;"b c"   'clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window"
+  ;;"b k"   'kill-current-buffer :which-key "Kill current buffer"
+  ;;"b n"   'next-buffer :which-key "Next buffer"
+  ;;"b p"   'previous-buffer :which-key "Previous buffer"
+  ;;"b B"   'ibuffer-list-buffers :which-key "Ibuffer list buffers"
+  ;;"b K"   'kill-buffer :which-key "Kill buffer"
+  ;;"f f"   'find-file :which-key "find file"
+  ;;"w n"   'evil-window-new :whick-key "open new window"
+  ;;"w c"   'evil-window-delete :whick-key "close window"
+  ;;"w r"   'evil-window-move-far-right :which-key "move window right"
+  ;;"w s"   'evil-window-vsplit :which-key "split window right"
+  ;;"e b"   'eval-buffer :which-key "evaluate elisp buffer"
+  ;;"l s"   'eval-last-sexp :which-key "evaluates last elisp s-expression"
+  ;;"o s"   'shell :which-key "opens shell"
+  ;;"o e"   'org-export-dispatch :which-key "opens org export"
+  ;;"h h"   'org-insert-headind :which-key "org inserts headinf at same level"
+  ;;"c b"   'org-insert-todo-heading :which-key "insert checkbox or TODO heading"
+  ;;"t b"   'org-toggle-checkbox :which-key "toggle org checkbox"
+  ;;"s k"   'org-skeleton :which-key "use org skeleton implementation"
+  ;;)
 
 
 (column-number-mode)

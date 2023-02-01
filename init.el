@@ -13,11 +13,10 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 (setq-default tab-width 4)
-;; org babel enable clisp support
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((R . t)
-   (lisp . t)))
+ '((lisp . t)
+  (R . t)))
 
 ;; package sources
 (require 'package)
@@ -77,6 +76,25 @@
 	:config
 	(evil-mode 1))
 
+;; skeleton
+(define-skeleton org-skeleton
+  "Header info for a emacs-org file."
+  "Title: "
+  "#+TITLE:" str " \n"
+  "#+AUTHOR: Moritz R. Hoffmann \n"
+  "#+INFOJS_OPT: \n"
+  "#+PROPERTY: session *R*"
+  "#+PROPERTY: cache yes"
+  "#+PROPERTY: results graphics" 
+  "#+PROPERTY: exports both"
+  "#+PROPERTY: tangle yes"
+  "#+STARTUP: indent \n"
+  "#+LATEX_HEADER: \\usepackage{parskip}"
+  "#+LATEX_HEADER: \\usepackage[ngerman]{babel}"
+  "#+LANGUAGE: ngerman"
+  "-------------------------------------------------------------------------------
+")
+
 (add-hook 'text-mode-hook #'auto-fill-mode)
 (setq-default fill-column 80)
 (add-hook 'prog-mode-hook #'auto-fill-mode)
@@ -91,31 +109,10 @@
 
 (setq TeX-PDF-mode t); PDF mode (rather than DVI-mode)
 
-(use-package org-bullets
-      :ensure t
-      :config
-      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-;; pdftools
-(use-package pdf-tools
-  :ensure t)
+(require 'cl-lib)
 
 (use-package slime
   :ensure t)
-
-(require 'ess)
-
-(setq org-latex-packages-alist '())
-(add-to-list 'org-latex-packages-alist '("" "color" t))
-(add-to-list 'org-latex-packages-alist '("" "physics" t))
-(add-to-list 'org-latex-packages-alist '("" "mathtools" t))
-(add-to-list 'org-latex-packages-alist '("" "xfrac" t))
-(add-to-list 'org-latex-packages-alist '("" "siunitx" t))
-(add-to-list 'org-latex-packages-alist '("" "mhchem" t))
-(add-to-list 'org-latex-packages-alist '("" "fontenc" t))
-(add-to-list 'org-latex-packages-alist '("" "multirow" t))
-(add-to-list 'org-latex-packages-alist '("" "graphicx" t))
-(add-to-list 'org-latex-packages-alist '("" "graphics" t))
 
 (require 'org-tempo)
 (setq inferior-lisp-program "sbcl") 
@@ -125,62 +122,78 @@
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 (setq org-confirm-babel-evaluate nil)
 
-;; skeleton
-(define-skeleton org-skeleton
-  "Header info for a emacs-org file."
-  "Title: "
-  "#+TITLE:" str " \n"
-  "#+AUTHOR: Moritz R. Hoffmann\n"
-  "#+email: moritz.hoffmann@tutanota.com\n"
-  "#+INFOJS_OPT: \n"
-  "#+PROPERTY: session *R*" 
-  "#+PROPERTY: cache yes" 
-  "#+PROPERTY: results graphics" 
-  "#+PROPERTY: exports both"
-  "#+PROPERTY: tangle yes"
-  "#+STARTUP: indent \n"
-  "#+LATEX_HEADER: \usepackage{parskip}"
-  "#+LATEX_HEADER: \usepackage[german]{babel}"
-  "#+LANGUAGE: ge"
-  "-------------------------------------------------------------------------------
-"
-  )
+(use-package org-bullets
+      :ensure t
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; pdftools
+(use-package pdf-tools
+  :ensure t)
+
+;; remember to download ess as gentoo package 
+(require 'ess)
+
+(use-package sudo-edit)
 
 ;; general keybinds
+(use-package general
+  :config
+  (general-evil-setup t))
 
-(use-package general)
-(general-evil-setup t)
-(general-create-definer mrh-def
-  :states '(normal insert emacs motion)
-  :prefix "SPC"
-  :non-normal-prefix "M-SPC"
-  :prefix-command 'mrh-prefix-command
-  :prefix-map 'mrh-prefix-map)
+(nvmap :prefix "SPC"
+       "b b"   '(ibuffer :which-key "Ibuffer")
+       "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+       "b k"   '(kill-current-buffer :which-key "Kill current buffer")
+       "b n"   '(next-buffer :which-key "Next buffer")
+       "b p"   '(previous-buffer :which-key "Previous buffer")
+       "b l"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
+       "b K"   '(kill-buffer :which-key "Kill buffer"))
 
-(mrh-def "h r r" '(lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key)
-  ;;"Reload emacs config"
-  ;;"b s"   'save-buffer :which-key "save buffer"
-  ;;"b c"   'clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window"
-  ;;"b k"   'kill-current-buffer :which-key "Kill current buffer"
-  ;;"b n"   'next-buffer :which-key "Next buffer"
-  ;;"b p"   'previous-buffer :which-key "Previous buffer"
-  ;;"b B"   'ibuffer-list-buffers :which-key "Ibuffer list buffers"
-  ;;"b K"   'kill-buffer :which-key "Kill buffer"
-  ;;"f f"   'find-file :which-key "find file"
-  ;;"w n"   'evil-window-new :whick-key "open new window"
-  ;;"w c"   'evil-window-delete :whick-key "close window"
-  ;;"w r"   'evil-window-move-far-right :which-key "move window right"
-  ;;"w s"   'evil-window-vsplit :which-key "split window right"
-  ;;"e b"   'eval-buffer :which-key "evaluate elisp buffer"
-  ;;"l s"   'eval-last-sexp :which-key "evaluates last elisp s-expression"
-  ;;"o s"   'shell :which-key "opens shell"
-  ;;"o e"   'org-export-dispatch :which-key "opens org export"
-  ;;"h h"   'org-insert-headind :which-key "org inserts headinf at same level"
-  ;;"c b"   'org-insert-todo-heading :which-key "insert checkbox or TODO heading"
-  ;;"t b"   'org-toggle-checkbox :which-key "toggle org checkbox"
-  ;;"s k"   'org-skeleton :which-key "use org skeleton implementation"
-  ;;)
+(nvmap :prefix "SPC"
+       "w c"   '(delete-other-windows :which-key "delete other windows than currently selected")
+       "w n"   '(evil-window-new :which-key "create new window")
+       "w r"   '(evil-window-move-far-right :which-key "moves window to the right"))
 
+(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
+       "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
+       "e d"   '(eval-defun :which-key "Eval defun")
+       "e e"   '(eval-expression :which-key "Eval elisp expression")
+       "e l"   '(eval-last-sexp :which-key "Eval last sexression")
+       "e r"   '(eval-region :which-key "Eval region"))
+
+(nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
+       "."     '(find-file :which-key "Find file")
+       "f f"   '(find-file :which-key "Find file")
+       "f s"   '(save-buffer :which-key "Save file")
+       "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
+       "f y"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
+       "f C"   '(copy-file :which-key "Copy file")
+       "f D"   '(delete-file :which-key "Delete file")
+       "f R"   '(rename-file :which-key "Rename file")
+       "f S"   '(write-file :which-key "Save file as...")
+       "f U"   '(sudo-edit :which-key "Sudo edit file"))
+
+(nvmap :keymaps 'override :prefix "SPC"
+       "c c"   '(compile :which-key "Compile")
+       "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
+       
+(nvmap :keymaps 'override :prefix "SPC"
+       "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
+       "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
+       "m e"   '(org-export-dispatch :which-key "Org export dispatch")
+       "m f"   '(org-footnote-new :which-key "Org footnote new")
+       "m h"   '(org-toggle-heading :which-key "Org toggle heading")
+       "m i"   '(org-toggle-item :which-key "Org toggle item")
+       "m n"   '(org-store-link :which-key "Org store link")
+       "m o"   '(org-set-property :which-key "Org set property")
+       "m t"   '(org-todo :which-key "Org todo")
+       "m x"   '(org-toggle-checkbox :which-key "Org toggle checkbox")
+       "m B"   '(org-babel-tangle :which-key "Org babel tangle")
+       "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
+       "m T"   '(org-todo-list :which-key "Org todo list")
+       "o a"   '(org-agenda :which-key "Org agenda")
+       )
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -189,15 +202,31 @@
 (dolist (mode '(term-mode-hook
                 eshell-mode-hook
 		shell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "The Emacs Valley is a dream come true!")
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 3)))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+			      (bookmarks . "book"))))
+
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(slime org-bullets general evil which-key doom-modeline doom-themes all-the-icons ivy use-package)))
+   '(general which-key use-package pdf-tools org-bullets ivy evil doom-themes doom-modeline all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

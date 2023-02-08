@@ -6,9 +6,9 @@
 xhost +local: &
 
 #unmute speaker
-amixer set Master 0 unmute &
+amixer set Master 50 unmute &
 amixer set Speaker 0 unmute &
-amixer set Headphone 0 unmute &
+amixer set Headphone 50 unmute &
 
 # emacs daemon
 /usr/bin/emacs --daemon &

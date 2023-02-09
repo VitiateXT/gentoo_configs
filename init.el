@@ -34,6 +34,10 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(require 'cl-lib)
+(use-package cl-libify
+  :ensure t)
+
 ;; ivy as completion framework
 (use-package ivy
   :diminish
@@ -83,15 +87,16 @@
   "#+TITLE:" str " \n"
   "#+AUTHOR: Moritz R. Hoffmann \n"
   "#+INFOJS_OPT: \n"
-  "#+PROPERTY: session *R*"
-  "#+PROPERTY: cache yes"
-  "#+PROPERTY: results graphics" 
-  "#+PROPERTY: exports both"
-  "#+PROPERTY: tangle yes"
+  "#+PROPERTY: session *R* \n"
+  "#+PROPERTY: cache yes \n"
+  "#+PROPERTY: results graphics \n" 
+  "#+PROPERTY: exports both \n"
+  "#+PROPERTY: tangle yes \n"
   "#+STARTUP: indent \n"
-  "#+LATEX_HEADER: \\usepackage{parskip}"
-  "#+LATEX_HEADER: \\usepackage[ngerman]{babel}"
-  "#+LANGUAGE: ngerman"
+  "#+STARTUP: content \n"
+  "#+LATEX_HEADER: \\usepackage{parskip} \n"
+  "#+LATEX_HEADER: \\usepackage[ngerman]{babel} \n"
+  "#+LANGUAGE: ngerman \n"
   "-------------------------------------------------------------------------------
 ")
 
@@ -109,8 +114,6 @@
 
 (setq TeX-PDF-mode t); PDF mode (rather than DVI-mode)
 
-(require 'cl-lib)
-
 (use-package slime
   :ensure t)
 
@@ -121,6 +124,8 @@
 (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 (setq org-confirm-babel-evaluate nil)
+
+(setq org-src-tab-acts-natively t)
 
 (use-package org-bullets
       :ensure t
@@ -136,6 +141,24 @@
 
 (use-package sudo-edit)
 
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :init
+  (evil-collection-init))
+
+(use-package go-translate
+  :ensure t)
+
+(setq gts-translate-list '(("de" "en") ("de" "jp")))
+
+;; (setq gts-default-translator (gts-translator :engines (gts-bing-engine)))
+(setq gts-default-translator
+      (gts-translator
+       :picker (gts-prompt-picker)
+       :engines (list (gts-bing-engine) (gts-google-engine))
+       :render (gts-buffer-render)))
+
 ;; general keybinds
 (use-package general
   :config
@@ -143,7 +166,8 @@
 
 (nvmap :prefix "SPC"
        "b b"   '(ibuffer :which-key "Ibuffer")
-       "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+       "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect
+       buffer other window")
        "b k"   '(kill-current-buffer :which-key "Kill current buffer")
        "b n"   '(next-buffer :which-key "Next buffer")
        "b p"   '(previous-buffer :which-key "Previous buffer")
@@ -151,9 +175,14 @@
        "b K"   '(kill-buffer :which-key "Kill buffer"))
 
 (nvmap :prefix "SPC"
-       "w c"   '(delete-other-windows :which-key "delete other windows than currently selected")
+       "w c"   '(delete-other-windows :which-key "delete other windows than
+       currently selected")
        "w n"   '(evil-window-new :which-key "create new window")
-       "w r"   '(evil-window-move-far-right :which-key "moves window to the right"))
+       "w r"   '(evil-window-move-far-right :which-key "moves window to the
+       right")
+	   "g t"   '(gts-do-translate :which-key "starts translator")
+	   "t t"   '(term :which-key "opens a terminal")
+	   "o s"   '(shell :which-key "opens a shell"))
 
 (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
        "e b"   '(eval-buffer :which-key "Eval elisp in buffer")
@@ -176,8 +205,11 @@
 
 (nvmap :keymaps 'override :prefix "SPC"
        "c c"   '(compile :which-key "Compile")
-       "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
-       
+  	   "n n"   '((lambda() (interactive) (find-file "~/orgdoc/notes.org"))
+				 :which-key "access personal notes")
+	   "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el"))
+				 :which-key "Reload emacs config"))
+
 (nvmap :keymaps 'override :prefix "SPC"
        "m *"   '(org-ctrl-c-star :which-key "Org-ctrl-c-star")
        "m +"   '(org-ctrl-c-minus :which-key "Org-ctrl-c-minus")
@@ -193,7 +225,10 @@
        "m I"   '(org-toggle-inline-images :which-key "Org toggle inline imager")
        "m T"   '(org-todo-list :which-key "Org todo list")
        "o a"   '(org-agenda :which-key "Org agenda")
-       )
+       "m s"   '(org-skeleton :which-key "insert org skeleton template")
+	   "s e"   '(org-edit-src-exit :which-key "exit src code block edit")
+	   "s w"   '(org-edit-src-code :which-key "edit src code block")
+	   "s s"   '(org-edit-src-save :which-key "save src code edit"))
 
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -207,11 +242,11 @@
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "The Emacs Valley is a dream come true!")
+  (setq dashboard-banner-logo-title "Guess who's back, bitches!")
   ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.emacs.d/emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
+  (setq dashboard-startup-banner "~/.emacs.d/monado_lambda_emacs.png")  ;; use custom image as banner
+  (setq dashboard-center-content t) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 7)
                           (agenda . 5 )
                           (bookmarks . 3)))
   :config
@@ -226,7 +261,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(general which-key use-package pdf-tools org-bullets ivy evil doom-themes doom-modeline all-the-icons)))
+   '(magit-popup magit evil-collection anki go-translate cl-libify general which-key use-package pdf-tools org-bullets ivy evil doom-themes doom-modeline all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

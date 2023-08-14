@@ -17,8 +17,6 @@ fi
 
 # vi mode
 set -o vi
-export EDITOR='vi'
-export VISUAL='vi'
 
 # Custom prompt
 export PS1="\[\e[31m\][\[\e[m\]\[\e[34m\]\u\[\e[m\]\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]\[\e[36m\] \W\[\e[m\]\[\e[31m\]]\[\e[m\] $ "
@@ -26,9 +24,16 @@ export PS1="\[\e[31m\][\[\e[m\]\[\e[34m\]\u\[\e[m\]\[\e[m\]\[\e[33m\]@\[\e[m\]\[
 # alias for emacsclient while daemon ist running
 # alias emacs="emacsclient -c -a 'emacs'"
 
+alias vim="nvim"
+
 # clipmenu env
 export CM_SELECTIONS="clipboard"
 export CM_DEBUG=0
 export CM_OUTPUT_CLIP=1
 export CM_MAX_CLIPS=25
 export CM_IGNORE_WINDOW="KeePassXC"
+
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
+ibus-daemon -dr

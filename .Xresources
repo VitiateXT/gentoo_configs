@@ -2,7 +2,7 @@
 !  Xresources from 19th May 2022 2:55
 
 ! set dpi
-Xft.dpi: 288
+Xft.dpi: 192
 
-! cursor size in X (can be overriden by gtk theme in some apps)
-Xcursor.size:56
+! set Cursorsize
+Xcursor.size: 32
